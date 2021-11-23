@@ -1,5 +1,5 @@
 # Run Note MicroService
-cd MicroService
+cd MicroServices
 
 cp .env.example .env
 
