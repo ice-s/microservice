@@ -10,8 +10,8 @@ services:
     links:
       - mongo
     volumes:
-      - ./AuthService/src:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./AuthService/src:/build/app
+      - /build/node_modules
     ports:
       - "3000:3000"
   user:
@@ -24,8 +24,8 @@ services:
     links:
       - mongo
     volumes:
-      - ./UserService/src:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./UserService/src:/build/app
+      - /build/node_modules
     ports:
       - "3001:3000"
   product:
@@ -38,8 +38,8 @@ services:
     links:
       - mongo
     volumes:
-      - ./ProductService/src:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./ProductService/src:/build/app
+      - /build/node_modules
     ports:
       - "3002:3000"
   order:
@@ -52,8 +52,8 @@ services:
     links:
       - mongo
     volumes:
-      - ./OrderService/src:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./OrderService/src:/build/app
+      - /build/node_modules
     ports:
       - "3003:3000"
   payment:
@@ -66,8 +66,8 @@ services:
     links:
       - mongo
     volumes:
-      - ./PaymentService/src:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./PaymentService/src:/build/app
+      - /build/node_modules
     ports:
       - "3004:3000"
   mongo:
@@ -82,7 +82,6 @@ services:
   mongo-express:
     image: mongo-express
     container_name: ${DOCKER_APP}-mongo-express
-    restart: always
     ports:
       - ${DOCKER_MONGO_EXPRESS_PORT}:8081
     links:

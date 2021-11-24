@@ -10,10 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "@grpc/proto-loader": "^0.6.6",
-    "grpc": "^1.24.11",
-    "uuid": "^8.3.2",
     "express": "^4.17.1",
-    "mongodb": "^4.2.0"
+    "jsonwebtoken": "^8.5.1",
+    "grpc": "^1.24.11",
+    "mongodb": "^4.2.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.3"

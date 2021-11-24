@@ -1,9 +1,17 @@
-# Run Note MicroService
+# Docker init
+
+```
 cd MicroServices
 
 cp .env.example .env
 
 docker-compose up -d --build
+```
+You can install node package outside of docker to IDE indexed (not mount with docker - only for IDE), ex:
+```
+cd AuthService
+npm i
+```
 
 ---
 #API LIST

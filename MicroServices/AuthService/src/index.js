@@ -3,6 +3,7 @@ const protoLoader = require('@grpc/proto-loader');
 const express = require("express");
 const mongoClient = require('mongodb').MongoClient;
 const bodyParser = require("body-parser");
+const jwt = require("jsonwebtoken");
 
 mongoClient.connect('mongodb://mongo:27017', function (err, db) {
     if (err) throw err;
@@ -11,23 +12,25 @@ mongoClient.connect('mongodb://mongo:27017', function (err, db) {
 
 const app = express();
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
 
-app.get("/api/auth/login", (req, res) => {
+app.post("/api/auth/login", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(
         {
             'status': true,
+            'token': jwt.sign({ foo: 'bar' }, 'shhhhh'),
             'message': 'call Remote Procedure to User Service to get User check credential',
         }
     ));
 });
 
-app.get("/api/auth/register", (req, res) => {
+app.post("/api/auth/register", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(
         {
             'status': true,
+            'data': req.body,
             'message': 'call Remote Procedure to User Service to Register User',
         }
     ));
