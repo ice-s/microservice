@@ -9,6 +9,6 @@ RUN npm install -g nodemon
 
 RUN npm cache clean --force && npm install
 
-COPY ./src .
+COPY ./src /build/src
 
-CMD ["nodemon", "/build/index.js"]
+CMD ["nodemon", "/build/src/index.js"]

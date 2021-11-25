@@ -8,7 +8,7 @@ const DB_NAME = "UserDB";
 const ObjectId = require('mongodb').ObjectID;
 // const connection = new MongoClient('mongodb://mongo:27017/userDB', { useUnifiedTopology: true });
 
-let packageDefinition = protoLoader.loadSync('users.proto', {
+let packageDefinition = protoLoader.loadSync('src/Proto/app.proto', {
     keepCase: true,
     longs: String,
     enums: String,
@@ -32,11 +32,34 @@ server.addService(Proto.UserService.service, {
             })
         }
     },
+    auth: (call, callback) => {
+        console.log("connect auth2 ");
+        let username = call.request.username;
+        let password = call.request.password;
+
+        MongoClient.connect(MongoConnectEndpoint, function (err, db) {
+            if (err) throw err;
+            let dbo = db.db(DB_NAME);
+            dbo.collection("users").findOne({'username':  username, 'password': password}, function (err, result) {
+                db.close();
+                if (err) {
+                    callback(null, result);
+                    return;
+                }
+
+                callback({
+                    code: grpc.status.NOT_FOUND,
+                    details: "Not found"
+                })
+            });
+        });
+    }
 });
 
-server.bind('127.0.0.1:50052', grpc.ServerCredentials.createInsecure());
-console.log('Server RPC running at http://127.0.0.1:50052');
+const RPC_PORT = process.env.RPC_PORT || 50000;
+server.bind('127.0.0.1:'+RPC_PORT, grpc.ServerCredentials.createInsecure());
 server.start();
+console.log("Server RPC running at port %d", RPC_PORT);
 
 const app = express();
 app.use(bodyParser.json());

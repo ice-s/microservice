@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+service UserService {
+    rpc List (Empty) returns (UserList) {}
+    rpc Get (UserRequestId) returns (User) {}
+    rpc Auth (Credential) returns (User) {}
+}
+
+message Empty {}
+
+message User {
+    string _id = 1;
+    string username = 2;
+    string password = 3;
+}
+
+message UserList {
+    repeated User users = 1;
+}
+
+message UserRequestId {
+    string _id = 1;
+}
+
+message Credential {
+    string username = 1;
+    string password = 2;
+}

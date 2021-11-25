@@ -7,13 +7,16 @@ services:
     container_name: ${DOCKER_APP}-auth-service
     environment:
       API_PORT: 3000
+      RPC_USER_PORT: 50000
+      RPC_USER_HOST: user
     links:
       - mongo
+      - user
     volumes:
-      - ./AuthService/src:/build/app
+      - ./AuthService/src:/build/src
       - /build/node_modules
     ports:
-      - "3000:3000"
+      - 3000:3000
   user:
     build:
       context: ./UserService
@@ -21,13 +24,15 @@ services:
     container_name: ${DOCKER_APP}-user-service
     environment:
       API_PORT: 3000
+      RPC_PORT: 50000
     links:
       - mongo
     volumes:
-      - ./UserService/src:/build/app
+      - ./UserService/src:/build/src
       - /build/node_modules
     ports:
-      - "3001:3000"
+      - 3001:3000
+      - 50001:50000
   product:
     build:
       context: ./ProductService
@@ -35,13 +40,15 @@ services:
     container_name: ${DOCKER_APP}-product-service
     environment:
       API_PORT: 3000
+      RPC_PORT: 50000
     links:
       - mongo
     volumes:
-      - ./ProductService/src:/build/app
+      - ./ProductService/src:/build/src
       - /build/node_modules
     ports:
-      - "3002:3000"
+      - 3002:3000
+      - 50002:50000
   order:
     build:
       context: ./OrderService
@@ -49,13 +56,15 @@ services:
     container_name: ${DOCKER_APP}-order-service
     environment:
       API_PORT: 3000
+      RPC_PORT: 50000
     links:
       - mongo
     volumes:
-      - ./OrderService/src:/build/app
+      - ./OrderService/src:/build/src
       - /build/node_modules
     ports:
-      - "3003:3000"
+      - 3003:3000
+      - 50003:50000
   payment:
     build:
       context: ./PaymentService
@@ -63,13 +72,15 @@ services:
     container_name: ${DOCKER_APP}-payment-service
     environment:
       API_PORT: 3000
+      RPC_PORT: 50000
     links:
       - mongo
     volumes:
-      - ./PaymentService/src:/build/app
+      - ./PaymentService/src:/build/src
       - /build/node_modules
     ports:
-      - "3004:3000"
+      - 3004:3000
+      - 50004:50000
   mongo:
     image: mongo
     container_name: ${DOCKER_APP}-mongo
