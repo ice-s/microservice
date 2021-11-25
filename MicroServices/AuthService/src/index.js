@@ -1,15 +1,8 @@
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
 const express = require("express");
-const mongoClient = require('mongodb').MongoClient;
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
-const http = require("http");
-
-mongoClient.connect('mongodb://mongo:27017', function (err, db) {
-    if (err) throw err;
-    console.log('Mongo connected');
-});
 
 const app = express();
 app.use(bodyParser.json());
@@ -19,29 +12,14 @@ const UserRPCClient = require('../src/RPCClient/user');
 
 app.post("/api/auth/login", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
-    var options = {
-        host: 'user',
-        port: 3000,
-        path: '/api/users',
-        method: 'GET'
-    };
 
-    http.request(options, function(res) {
-        console.log('STATUS: ' + res.statusCode);
-        console.log('HEADERS: ' + JSON.stringify(res.headers));
-        res.setEncoding('utf8');
-        res.on('data', function (chunk) {
-            console.log('BODY: ' + chunk);
-        });
-    }).end();
-
-    UserRPCClient.auth({username: req.body.username, password: req.body.password}, (error, user) => {
+    UserRPCClient.auth({'username': req.body.username, 'password': req.body.password}, (error, user) => {
         if (!error) {
             res.end(JSON.stringify(
                 {
                     'status': true,
                     'user': user,
-                    'token': jwt.sign({foo: 'bar'}, 'shhhhh'),
+                    'token': jwt.sign(user, 'shhhhh'),
                     'message': 'call Remote Procedure to User Service to get User check credential',
                 }
             ));
@@ -49,7 +27,7 @@ app.post("/api/auth/login", (req, res) => {
             res.end(JSON.stringify(
                 {
                     'status': false,
-                    'data': {},
+                    'request': {'username': req.body.username, 'password': req.body.password},
                     'message': error,
                 }
             ));
