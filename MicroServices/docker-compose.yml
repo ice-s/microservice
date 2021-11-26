@@ -105,6 +105,7 @@ services:
   mongo:
     image: mongo
     container_name: ${DOCKER_APP}-mongo
+    command: mongod --quiet --logpath /dev/null
     volumes:
       - mongodb_data:/data/db
     environment:

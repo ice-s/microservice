@@ -3,14 +3,35 @@ syntax = "proto3";
 service UserService {
     rpc List (Empty) returns (UserList) {}
     rpc Get (UserRequestId) returns (User) {}
+    rpc Auth (Credential) returns (User) {}
+}
+
+service AuthService {
+    rpc Decode (Token) returns (TokenDetail) {}
+}
+
+service ProductService {
+    rpc Empty (Empty) returns (Empty){}
+}
+
+service OrderService {
+    rpc Empty (Empty) returns (Empty){}
+}
+
+service PaymentService {
+    rpc Empty (Empty) returns (Empty){}
 }
 
 message Empty {}
 
+message IdInfo {
+    string _id = 1;
+}
+
 message User {
-    string id = 1;
-    string name = 2;
-    string email = 3;
+    string _id = 1;
+    string username = 2;
+    string password = 3;
 }
 
 message UserList {
@@ -18,5 +39,26 @@ message UserList {
 }
 
 message UserRequestId {
-    string id = 1;
+    string _id = 1;
+}
+
+message Credential {
+    string username = 1;
+    string password = 2;
+}
+
+message Token {
+    string token = 1;
+}
+
+message TokenDetail {
+    bool status = 1;
+    string token = 2;
+    UserInfo user = 3;
+    string message = 4;
+
+    message UserInfo {
+       string _id = 1;
+       string username = 2;
+    }
 }
